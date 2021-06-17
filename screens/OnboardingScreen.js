@@ -31,7 +31,12 @@ const dots = ({ selected }) => {
   backgroundColor = selected ? "rgba(0,0,0,0.8)" : "rgba(0,0,0,0.3)";
   return (
     <View
-      style={{ width: 5, height: 5, marginHorizontal: 3, backgroundColor }}
+      style={{
+        width: 5,
+        height: 5,
+        marginHorizontal: 3,
+        backgroundColor,
+      }}
     />
   );
 };
@@ -45,7 +50,7 @@ export default function OnboardingScreen({ navigation }) {
       DoneButtonComponent={done}
       DotComponent={dots}
       onSkip={() => navigation.replace("Login")}
-      onDone={() => navigation.navigate("Login")}
+      onDone={() => navigation.replace("Login")}
       pages={[
         {
           backgroundColor: "#FCFFCE",
