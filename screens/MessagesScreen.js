@@ -5,10 +5,10 @@ import { View, Text, StyleSheet } from "react-native";
 
 // ---------------------------------------------------------------
 
-export default function HomeScreen() {
+export default function MessagesScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome</Text>
+      <Text style={styles.text}>Message Screen</Text>
     </View>
   );
 }

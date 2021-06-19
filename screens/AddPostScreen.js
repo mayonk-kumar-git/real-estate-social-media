@@ -5,17 +5,18 @@ import { View, Text, StyleSheet } from "react-native";
 
 // ---------------------------------------------------------------
 
-export default function HomeScreen() {
+export default function AppPostScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome</Text>
+      <Text style={styles.text}>What's in your mind... </Text>
+      <Text style={{color:"grey", fontSize:15, textAlign:"center"}}>Need not post everything that comes to your mind</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f9fafd",
+    backgroundColor: "#2e64e515",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
