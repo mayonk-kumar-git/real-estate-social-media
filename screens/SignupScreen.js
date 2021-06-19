@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import * as Font from "expo-font";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
@@ -6,6 +6,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
 import SocialButton from "../components/SocialButton";
+import { AuthContext } from "../navigation/AuthProvider";
 // ---------------------------------------------------------------------------
 
 //declaring custom font------------------------------------------------
@@ -30,6 +31,8 @@ export default function SignupScreen({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
+
+  const { register } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -59,7 +62,7 @@ export default function SignupScreen({ navigation }) {
       />
       <FormButton
         buttonTitle="Sign Up"
-        onPress={() => alert("sign up button clicked")}
+        onPress={() => register(email, password)}
       />
 
       <View style={styles.textPrivate}>
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 30,
-    marginTop: -50
+    marginTop: -50,
   },
   text: {
     // fontFamily: "Lato-BoldItalic",

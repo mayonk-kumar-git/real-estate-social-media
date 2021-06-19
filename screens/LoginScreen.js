@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontFamily: "Lato-BoldItalic",
+    // fontFamily: "Lato-BoldItalic",
     fontSize: 28,
     marginBottom: 10,
     color: "#051d5f",
@@ -129,6 +129,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "500",
     color: "#2e64e5",
-    fontFamily: "Lato-Regular",
+    // fontFamily: "Lato-Regular",
   },
 });
