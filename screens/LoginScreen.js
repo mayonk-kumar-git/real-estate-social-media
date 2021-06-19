@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import * as Font from "expo-font";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 
@@ -6,6 +6,7 @@ import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
 import SocialButton from "../components/SocialButton";
+import { AuthContext } from "../navigation/AuthProvider";
 // ---------------------------------------------------------------------------
 
 //declaring custom font------------------------------------------------
@@ -29,6 +30,8 @@ async function loadFonts() {
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  const { login } = useContext(AuthContext);
 
   useEffect(() => {
     loadFonts;
@@ -56,7 +59,9 @@ export default function LoginScreen({ navigation }) {
       />
       <FormButton
         buttonTitle="Sign In"
-        onPress={() => alert("sign in button clicked")}
+        onPress={() => {
+          login(email, password);
+        }}
       />
 
       <TouchableOpacity
@@ -104,8 +109,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal:30,
-    paddingTop:40
+    paddingHorizontal: 30,
+    paddingTop: 40,
   },
   logo: {
     height: 150,

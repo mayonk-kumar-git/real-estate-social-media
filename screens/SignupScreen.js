@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 30,
-    marginTop: -50,
+    paddingHorizontal: 30,
+    paddingTop:40,
   },
   text: {
     // fontFamily: "Lato-BoldItalic",
