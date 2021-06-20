@@ -34,13 +34,13 @@ export default function PredictionScreen() {
 
   // -----------------------------------------------------------------------------
   useEffect(() => {
-    console.log("monk-it1");
+    // console.log("monk-it1");
     if (predicting && location != "" && bath != 0 && bhk != 0 && sqft != 0.0) {
-      console.log("inside if");
+      // console.log("inside if");
       fetch(BASE_URI + `/predict/${location}/${sqft}/${bath}/${bhk}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log("monk-it3");
+          // console.log("monk-it3");
           console.log(data);
           setPrice(parseFloat(data.prediction));
         })
@@ -49,7 +49,7 @@ export default function PredictionScreen() {
           console.log(error);
         });
     } else {
-      setPrice(0);
+      setPrice(0.0);
     }
     setPredicting(false);
   }, [predicting]);
@@ -123,12 +123,13 @@ export default function PredictionScreen() {
         }}
       />
       <Pressable
+        style={styles.buttonContainer}
         onPress={() => {
           console.log("button pressed");
           setPredicting(true);
         }}
       >
-        <Text style={styles.button}>Predict</Text>
+        <Text style={styles.buttonText}>Predict</Text>
       </Pressable>
       <View style={styles.predictionContainer}>
         <Text style={styles.predictionText}>
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   predictionContainer: {
-    marginTop: 40,
+    marginTop: 20,
     marginBottom: 10,
     width: "50%",
     height: windowHeight / 15,
@@ -172,6 +173,7 @@ const styles = StyleSheet.create({
   predictionText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "green",
   },
   picker: {
     marginTop: 5,
@@ -190,16 +192,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  button: {
-    borderWidth: 2,
-    borderColor: "purple",
-    backgroundColor: "purple",
-    borderRadius: 30,
-    width: 120,
-    paddingVertical: 10,
-    paddingLeft: 40,
-    margin: 20,
-    color: "white",
+  buttonContainer: {
+    marginTop: 10,
+    width: "100%",
+    height: windowHeight / 15,
+    backgroundColor: "#2e64e5",
+    padding: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 15,
+  },
+  buttonText: {
+    fontSize: 18,
     fontWeight: "bold",
+    color: "#ffffff",
   },
 });
