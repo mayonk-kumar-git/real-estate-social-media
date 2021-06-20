@@ -52,8 +52,8 @@ export default function AuthStack() {
         options={({ navigation }) => ({
           title: "",
           headerStyle: {
-            backgroundColor: "#f9fafd",
-            shadowColor: "#f9fafd",
+            backgroundColor: "#DEE5F6",
+            shadowColor: "#DEE5F6",
             elevation: 0,
           },
           headerLeft: () => (
@@ -61,7 +61,7 @@ export default function AuthStack() {
               <FontAwesome.Button
                 name="long-arrow-left"
                 size={25}
-                backgroundColor="#f9fafd"
+                backgroundColor="#DEE5F6"
                 color="#333"
                 onPress={() => {
                   navigation.navigate("Login");

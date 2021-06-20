@@ -75,7 +75,7 @@ export default function LoginScreen({ navigation }) {
         buttonTitle="Sign In with FaceBook"
         btnType="facebook"
         color="#4867aa"
-        backgroundColor="#e6eaf4"
+        backgroundColor="#B5D3FD"
         onPress={() => {
           alert("facebook Button clicked");
         }}
@@ -105,7 +105,7 @@ export default function LoginScreen({ navigation }) {
 //Styling------------------------------------------------------------------
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f9fafd",
+    backgroundColor: "#DEE5F6",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

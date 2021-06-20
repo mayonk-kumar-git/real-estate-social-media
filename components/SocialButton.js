@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: windowHeight / 15,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 15,
     flexDirection: "row",
   },
   iconWrapper: {

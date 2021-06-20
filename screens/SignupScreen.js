@@ -94,7 +94,7 @@ export default function SignupScreen({ navigation }) {
         buttonTitle="Sign Up with FaceBook"
         btnType="facebook"
         color="#4867aa"
-        backgroundColor="#e6eaf4"
+        backgroundColor="#B5D3FD"
         onPress={() => {
           alert("facebook Button clicked");
         }}
@@ -124,18 +124,19 @@ export default function SignupScreen({ navigation }) {
 //Styling------------------------------------------------------------------
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f9fafd",
+    backgroundColor: "#DEE5F6",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 30,
-    paddingTop:40,
+    // paddingTop:40,
   },
   text: {
     // fontFamily: "Lato-BoldItalic",
-    fontSize: 28,
-    marginBottom: 10,
+    fontSize: 35,
+    marginBottom: 60,
     color: "#051d5f",
+
   },
   navButton: {
     marginTop: 15,
