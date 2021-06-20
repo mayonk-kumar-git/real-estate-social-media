@@ -26,8 +26,7 @@ export default function PredictionInput({
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginTop: 5,
-    marginBottom: 10,
+    margin:10,
     width: "100%",
     height: windowHeight / 15,
     borderColor: "#ccc",
