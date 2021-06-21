@@ -51,6 +51,7 @@ export default function LocationPicker({
             data={data}
             renderItem={renderItemView}
             keyExtractor={(item) => String(item.id)}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </Modal>

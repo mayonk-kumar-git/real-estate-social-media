@@ -29,10 +29,10 @@ const FeedStack = ({ navigation }) => (
         headerTitleStyle: {
           color: "#2e64e5",
           // fontFamily: 'Kufam-SemiBoldItalic',
-          fontSize: 28,
+          fontSize: 18,
         },
         headerStyle: {
-          backgroundColor: "#DEE5F6",
+          backgroundColor: "#F2F5FE",
           shadowColor: "#fff",
           elevation: 0,
         },
@@ -41,7 +41,7 @@ const FeedStack = ({ navigation }) => (
             <FontAwesome5.Button
               name="plus"
               size={22}
-              backgroundColor="#DEE5F6"
+              backgroundColor="#F2F5FE"
               color="#2e64e5"
               onPress={() => navigation.navigate("AddPost")}
             />
