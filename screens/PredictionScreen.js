@@ -41,7 +41,7 @@ export default function PredictionScreen() {
         .then((response) => response.json())
         .then((data) => {
           // console.log("monk-it3");
-          console.log(data);
+          // console.log(data);
           setPrice(parseFloat(data.prediction));
         })
         .catch((error) => {
