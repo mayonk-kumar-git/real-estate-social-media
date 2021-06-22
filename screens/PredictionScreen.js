@@ -17,7 +17,7 @@ import { locationCodeData } from "../config/locationCodeData";
 import { windowWidth, windowHeight } from "../utils/Dimentions";
 
 // ---------------------------------------------------------------
-const BASE_URI = "http://192.168.2.218:5000/";
+const BASE_URI = "http://192.168.158.218:5000/";
 export default function PredictionScreen() {
   // const [locationCodeData, setLocationCodeData] = useState([]);
   const [location, setLocation] = useState("");
@@ -36,11 +36,11 @@ export default function PredictionScreen() {
   useEffect(() => {
     // console.log("monk-it1");
     if (predicting && location != "" && bath != 0 && bhk != 0 && sqft != 0.0) {
-      // console.log("inside if");
+      console.log("inside if");
       fetch(BASE_URI + `/predict/${location}/${sqft}/${bath}/${bhk}`)
         .then((response) => response.json())
         .then((data) => {
-          // console.log("monk-it3");
+          console.log("monk-it3");
           // console.log(data);
           setPrice(parseFloat(data.prediction));
         })

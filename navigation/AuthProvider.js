@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react";
-import auth from "@react-native-firebase/auth";
 import * as firebase from "firebase";
 
 // -------------------------------------------------------------------------
@@ -13,7 +12,10 @@ const firebaseConfig = {
   appId: "1:190778601669:web:0ed30cf6980dff12d9c0ac",
 };
 
-export const fireBase = firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 // -------------------------------------------------------------------------
 
 export const AuthContext = createContext();
@@ -27,14 +29,14 @@ export function AuthProvider({ children }) {
         setUser,
         login: async (email, password) => {
           try {
-            await fireBase.auth().signInWithEmailAndPassword(email, password);
+            await firebase.auth().signInWithEmailAndPassword(email, password);
           } catch (e) {
             console.log(e);
           }
         },
         register: async (email, password) => {
           try {
-            await fireBase
+            await firebase
               .auth()
               .createUserWithEmailAndPassword(email, password);
           } catch (e) {
@@ -43,7 +45,7 @@ export function AuthProvider({ children }) {
         },
         logout: async () => {
           try {
-            await fireBase.auth().signOut();
+            await firebase.auth().signOut();
           } catch (e) {
             console.log(e);
           }

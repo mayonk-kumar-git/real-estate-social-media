@@ -2,11 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import auth from "@react-native-firebase/auth";
 import { View, Text } from "react-native";
+import * as firebase from "firebase";
 
 // ----------------------------------------------------------------------------
 import AuthStack from "./AuthStack";
 import AppStack from "./AppStack";
-import { AuthContext, fireBase } from "./AuthProvider";
+import { AuthContext } from "./AuthProvider";
 // ----------------------------------------------------------------------------
 
 export default function Routes() {
@@ -21,7 +22,7 @@ export default function Routes() {
 
   useEffect(() => {
     try {
-      const subscriber = fireBase.auth().onAuthStateChanged(onAuthStateChanged);
+      const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
       return subscriber; // unsubscribe on unmount
     } catch (e) {
       setError(String(e));
