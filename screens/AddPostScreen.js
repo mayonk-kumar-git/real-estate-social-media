@@ -1,18 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+  LogBox,
+} from "react-native";
 import ActionButton from "react-native-action-button";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
+import * as firebase from "firebase";
 
 // ---------------------------------------------------------------
 
 // ---------------------------------------------------------------
-import { InputWrapper, InputField, AddImage } from "../styles/AddPost";
+import {
+  InputWrapper,
+  InputField,
+  AddImage,
+  StatusWrapper,
+  SubmitBtn,
+  SubmitBtnText,
+} from "../styles/AddPost";
 // ---------------------------------------------------------------
 
 export default function AppPostScreen() {
   const [image, setImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
 
+  // -------------------------------------------------------------------------------
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -40,6 +58,76 @@ export default function AppPostScreen() {
     }
   }
 
+  // ---------------------------------------------------------------------------
+
+  async function submitPost() {
+    const imageUrl = await uploadImageToFirebaseStore();
+    console.log("Image Url : ", imageUrl);
+  }
+
+  // ---------------------------------------------------------------------------
+  async function uploadImageToFirebaseStore() {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = () => {
+        resolve(xhr.response);
+      };
+      xhr.onerror = () => {
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", image, true);
+      xhr.send(null);
+    });
+
+    const uploadUri = image;
+    let fileName = uploadUri.substring(uploadUri.lastIndexOf("/") + 1);
+
+    // Adding timestamp to file Name to give every file a unique name
+    const fileExtension = fileName.split(".").pop();
+    const name = fileName.split(".").slice(0, -1).join(".");
+    fileName = name + "_" + Date.now() + "." + fileExtension;
+
+    setUploading(true);
+    setTransferred(0);
+    // this line of code is just to ignore the timer warning by react native
+    LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
+
+    const storageRef = firebase.storage().ref().child(`photos/${fileName}`);
+    const task = storageRef.put(blob);
+
+    task.on("state_changed", (taskSnapshot) => {
+      console.log(
+        `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`
+      );
+      setTransferred(
+        Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
+          100
+      );
+    });
+
+    task.then(() => {
+      console.log("Image uploaded to the bucket!");
+    });
+
+    try {
+      //This below line of code uploads the image to the url
+      await task;
+
+      const url = await storageRef.getDownloadURL();
+      setUploading(false);
+      Alert.alert("Successfull!!", "Your post has been successfully uploaded.");
+      setImage(null);
+      return url;
+    } catch (e) {
+      console.log(e);
+      setImage(null);
+      return null;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+
   return (
     <View style={styles.container}>
       <InputWrapper>
@@ -49,6 +137,16 @@ export default function AppPostScreen() {
           multiline
           numberOfLines={4}
         />
+        {uploading ? (
+          <StatusWrapper>
+            <Text>{transferred} % completed</Text>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </StatusWrapper>
+        ) : (
+          <SubmitBtn onPress={submitPost}>
+            <SubmitBtnText>Post</SubmitBtnText>
+          </SubmitBtn>
+        )}
       </InputWrapper>
       <ActionButton buttonColor="rgba(231,76,60,1)">
         <ActionButton.Item
@@ -62,7 +160,6 @@ export default function AppPostScreen() {
           buttonColor="#3498db"
           title="Choose Photos"
           onPress={() => {
-            console.log("choose Photos");
             pickImage();
           }}
         >

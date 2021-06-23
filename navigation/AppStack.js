@@ -67,16 +67,16 @@ const FeedStack = ({ navigation }) => (
             <Ionicons name="arrow-back" size={25} color="#2e64e5" />
           </View>
         ),
-        headerRight: () => (
-          <TouchableOpacity
-            style={{ marginRight: 20 }}
-            onPress={() => {
-              alert("You UGLY!! Please dont post");
-            }}
-          >
-            <Text style={{ color: "#2e64e5", fontSize: 18 }}>Post</Text>
-          </TouchableOpacity>
-        ),
+        // headerRight: () => (
+        //   <TouchableOpacity
+        //     style={{ marginRight: 20 }}
+        //     onPress={() => {
+        //       alert("You UGLY!! Please dont post");
+        //     }}
+        //   >
+        //     <Text style={{ color: "#2e64e5", fontSize: 18 }}>Post</Text>
+        //   </TouchableOpacity>
+        // ),
       }}
     />
     <Stack.Screen
