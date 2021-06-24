@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import moment from "moment";
 
 // ---------------------------------------------------------------
 import { AuthContext } from "../navigation/AuthProvider";
@@ -20,7 +21,7 @@ import {
 } from "../styles/FeedStyles";
 // ---------------------------------------------------------------
 
-export default function PostCard({ item , onDelete}) {
+export default function PostCard({ item, onDelete }) {
   const { user } = useContext(AuthContext);
 
   return (
@@ -29,7 +30,7 @@ export default function PostCard({ item , onDelete}) {
         <UserImg source={item.userImg} />
         <UserInfoText>
           <UserName>{item.userName}</UserName>
-          <PostTime>{item.postTime.toString()}</PostTime>
+          <PostTime>{moment(item.postTime.toDate()).fromNow()}</PostTime>
         </UserInfoText>
       </UserInfo>
       <PostText>{item.post}</PostText>
@@ -61,7 +62,7 @@ export default function PostCard({ item , onDelete}) {
 
         {/* edit this after wards only show this delete button in profile section */}
         {user.uid == item.userId ? (
-          <Interaction onPress ={()=> onDelete(item.id)}>
+          <Interaction onPress={() => onDelete(item.id)}>
             <Ionicons name="md-trash-bin" size={25} color="orange" />
             <InteractionText></InteractionText>
           </Interaction>
