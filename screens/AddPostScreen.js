@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as firebase from "firebase";
 
 // ---------------------------------------------------------------
-
+import { AuthContext } from "../navigation/AuthProvider";
 // ---------------------------------------------------------------
 import {
   InputWrapper,
@@ -24,11 +24,16 @@ import {
   SubmitBtnText,
 } from "../styles/AddPost";
 // ---------------------------------------------------------------
+// this line of code is just to ignore the timer warning by react native
+LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
 export default function AppPostScreen() {
+  const { user, logout } = useContext(AuthContext);
+
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
+  const [post, setPost] = useState(null);
 
   // -------------------------------------------------------------------------------
   useEffect(() => {
@@ -63,6 +68,30 @@ export default function AppPostScreen() {
   async function submitPost() {
     const imageUrl = await uploadImageToFirebaseStore();
     console.log("Image Url : ", imageUrl);
+
+    var db = firebase.firestore();
+
+    db.collection("post")
+      .add({
+        userId: user.uid,
+        post: post,
+        postImg: imageUrl,
+        postTime: firebase.firestore.Timestamp.fromDate(new Date()),
+        likes: null,
+        comments: null,
+      })
+      .then((docRef) => {
+        console.log("Document written with the id : ", docRef);
+        setPost(null);
+        Alert.alert(
+          "Successfull!!",
+          "Your post has been successfully uploaded."
+        );
+      })
+      .catch((error) => {
+        console.log("We have got into an error : ", error);
+        setPost(null);
+      });
   }
 
   // ---------------------------------------------------------------------------
@@ -90,8 +119,6 @@ export default function AppPostScreen() {
 
     setUploading(true);
     setTransferred(0);
-    // this line of code is just to ignore the timer warning by react native
-    LogBox.ignoreLogs(["Setting a timer for a long period of time"]);
 
     const storageRef = firebase.storage().ref().child(`photos/${fileName}`);
     const task = storageRef.put(blob);
@@ -116,7 +143,7 @@ export default function AppPostScreen() {
 
       const url = await storageRef.getDownloadURL();
       setUploading(false);
-      Alert.alert("Successfull!!", "Your post has been successfully uploaded.");
+      // Alert.alert("Successfull!!", "Your post has been successfully uploaded.");
       setImage(null);
       return url;
     } catch (e) {
@@ -133,9 +160,11 @@ export default function AppPostScreen() {
       <InputWrapper>
         {image !== null ? <AddImage source={{ uri: image }} /> : null}
         <InputField
+          value={post}
           placeholder="What's in your mind..."
           multiline
           numberOfLines={4}
+          onChangeText={(content) => setPost(content)}
         />
         {uploading ? (
           <StatusWrapper>
