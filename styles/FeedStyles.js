@@ -12,6 +12,7 @@ export const Card = styled.View`
   width: 100%;
   margin-bottom: 20px;
   border-radius: 15px;
+  flex-wrap: wrap;
 `;
 
 export const UserInfo = styled.View`
@@ -40,12 +41,14 @@ export const UserName = styled.Text`
 export const PostTime = styled.Text`
   font-size: 12px;
   color: #666;
+  max-width: 95%;
 `;
 
 export const PostText = styled.Text`
   font-size: 14px;
   padding-left: 15px;
   padding-right: 15px;
+  max-width: 95%;
 `;
 
 export const PostImg = styled.Image`

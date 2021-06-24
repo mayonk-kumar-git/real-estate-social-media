@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 // ---------------------------------------------------------------
-
+import { AuthContext } from "../navigation/AuthProvider";
 // ---------------------------------------------------------------
 import {
   Card,
@@ -20,29 +20,31 @@ import {
 } from "../styles/FeedStyles";
 // ---------------------------------------------------------------
 
-export default function PostCard({ item }) {
+export default function PostCard({ item , onDelete}) {
+  const { user } = useContext(AuthContext);
+
   return (
     <Card>
       <UserInfo>
         <UserImg source={item.userImg} />
         <UserInfoText>
           <UserName>{item.userName}</UserName>
-          <PostTime>{item.postTime}</PostTime>
+          <PostTime>{item.postTime.toString()}</PostTime>
         </UserInfoText>
       </UserInfo>
       <PostText>{item.post}</PostText>
-      {item.postImg == "none" ? (
+      {item.postImg == null ? (
         <Divider></Divider>
       ) : (
-        <PostImg source={item.postImg} />
+        <PostImg source={{ uri: item.postImg }} />
       )}
 
       <InteractionWrapper>
         <Interaction>
           <Ionicons
-            name={item.liked ? "heart" : "heart-outline"}
+            name={item.likes == 0 ? "heart" : "heart-outline"}
             size={25}
-            color={item.liked ? "red" : "black"}
+            color={item.likes == 0 ? "red" : "black"}
           />
           <InteractionText>{item.likes == 0 ? "" : item.likes}</InteractionText>
         </Interaction>
@@ -56,6 +58,14 @@ export default function PostCard({ item }) {
           <Ionicons name="send-outline" size={25} />
           <InteractionText></InteractionText>
         </Interaction>
+
+        {/* edit this after wards only show this delete button in profile section */}
+        {user.uid == item.userId ? (
+          <Interaction onPress ={()=> onDelete(item.id)}>
+            <Ionicons name="md-trash-bin" size={25} color="orange" />
+            <InteractionText></InteractionText>
+          </Interaction>
+        ) : null}
       </InteractionWrapper>
     </Card>
   );

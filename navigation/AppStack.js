@@ -106,6 +106,7 @@ const AppStack = () => {
     <Tab.Navigator
       tabBarOptions={{
         activeTintColor: "#2e64e5",
+        keyboardHidesTabBar: true,
       }}
     >
       <Tab.Screen

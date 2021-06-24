@@ -69,9 +69,11 @@ export default function AppPostScreen() {
     const imageUrl = await uploadImageToFirebaseStore();
     console.log("Image Url : ", imageUrl);
 
-    var db = firebase.firestore();
+    // var db = firebase.firestore();
 
-    db.collection("post")
+    firebase
+      .firestore()
+      .collection("post")
       .add({
         userId: user.uid,
         post: post,
@@ -81,8 +83,11 @@ export default function AppPostScreen() {
         comments: null,
       })
       .then((docRef) => {
-        console.log("Document written with the id : ", docRef);
+        // console.log("Document written with the id : ", docRef);
+        console.log("Post written to the database successfully");
+        setImage(null);
         setPost(null);
+        setUploading(false);
         Alert.alert(
           "Successfull!!",
           "Your post has been successfully uploaded."
@@ -90,12 +95,16 @@ export default function AppPostScreen() {
       })
       .catch((error) => {
         console.log("We have got into an error : ", error);
+        setImage(null);
         setPost(null);
+        setUploading(false);
       });
   }
 
   // ---------------------------------------------------------------------------
   async function uploadImageToFirebaseStore() {
+    if (image == null) return null;
+
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = () => {
@@ -142,9 +151,9 @@ export default function AppPostScreen() {
       await task;
 
       const url = await storageRef.getDownloadURL();
-      setUploading(false);
+      // setUploading(false);
       // Alert.alert("Successfull!!", "Your post has been successfully uploaded.");
-      setImage(null);
+      // setImage(null);
       return url;
     } catch (e) {
       console.log(e);

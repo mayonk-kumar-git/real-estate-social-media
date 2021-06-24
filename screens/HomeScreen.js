@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import * as firebase from "firebase";
 import { FlatList } from "react-native-gesture-handler";
 
 // ---------------------------------------------------------------
@@ -88,11 +89,64 @@ const Posts = [
 ];
 
 export default function HomeScreen() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const list = [];
+        await firebase
+          .firestore()
+          .collection("post")
+          .orderBy("postTime", "desc")
+          .get()
+          .then((querySnapshot) => {
+            console.log("Total Posts : ", querySnapshot.size);
+
+            querySnapshot.forEach((doc) => {
+              const { post, postImg, postTime, likes, comments, userId } =
+                doc.data();
+              list.push({
+                id: doc.id,
+                //if the field name is same as the value name we can simply write the value. for example : instead of -- userId : userId, i can write only userId. But i prefer the first way of writting
+                userId: userId,
+                userName: "Test Name",
+                userImg: require("../assets/users/user1.jpg"),
+                postTime: postTime,
+                post: post,
+                postImg: postImg,
+                liked: true,
+                likes: likes,
+                comments: comments,
+              });
+            });
+          });
+
+        setPosts(list);
+        if (loading) {
+          setLoading(false);
+        }
+
+        // console.log("Posts : ", list);
+      } catch (error) {
+        console.log("We have got into an error :", error);
+      }
+    };
+    fetchPost();
+  }, []);
+
+  function deletePost(postId) {
+    console.log("To be deleted Post Id : ", postId);
+  }
+
   return (
     <Container>
       <FlatList
-        data={Posts}
-        renderItem={({ item }) => <PostCard item={item} />}
+        data={posts}
+        renderItem={({ item }) => (
+          <PostCard item={item} onDelete={deletePost} />
+        )}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
       />
