@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import * as firebase from "firebase";
+import { Alert } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import * as firebase from "firebase";
 
 // ---------------------------------------------------------------
 import PostCard from "../components/PostCard";
@@ -136,8 +137,53 @@ export default function HomeScreen() {
     fetchPost();
   }, []);
 
+  function deleteFirestoreData(postId) {
+    firebase
+      .firestore()
+      .collection("post")
+      .doc(postId)
+      .delete()
+      .then(() => {
+        console.log("Post has been successfully deleted");
+        Alert.alert("Deleted!!", "Your post has been deleted successfully!");
+      })
+      .catch((e) => {
+        console.log("We have got into an error ", e);
+      });
+  }
+
   function deletePost(postId) {
     console.log("To be deleted Post Id : ", postId);
+
+    firebase
+      .firestore()
+      .collection("post")
+      .doc(postId)
+      .get()
+      .then((documentSnapshot) => {
+        if (documentSnapshot.exists) {
+          const { postImg } = documentSnapshot.data();
+          console.log("postImg : ", postImg);
+          if (postImg != null) {
+            console.log("here");
+            const storageRef = firebase.storage().refFromURL(postImg);
+            const imageRef = firebase.storage().ref(storageRef.fullPath);
+
+            imageRef
+              .delete()
+              .then(() => {
+                console.log(`${postImg} has been deleted successfully`);
+              })
+              .catch((e) => {
+                console.log("We have got into an error ", e);
+              });
+          }
+          deleteFirestoreData(postId);
+        }
+      })
+      .catch((e) => {
+        console.log("We have an error : ", e);
+      });
   }
 
   return (
