@@ -101,6 +101,32 @@ const FeedStack = ({ navigation }) => (
   </Stack.Navigator>
 );
 
+const ProfileStack = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EditProfile"
+        component={EditProfileScreen}
+        options={{
+          headerTitle: "Edit Profile",
+          headerBackTitleVisible: false,
+          headerTitleAlign: "center",
+          headerStyle: {
+            backgroundColor: "#fff",
+            shadowColor: "#fff",
+            elevation: 0,
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const AppStack = () => {
   return (
     <Tab.Navigator
@@ -153,7 +179,7 @@ const AppStack = () => {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStack}
         options={{
           // tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
