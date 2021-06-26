@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   StyleSheet,
+  Alert,
 } from "react-native";
 
 // ---------------------------------------------------------------
@@ -184,11 +185,31 @@ export default function EditProfileScreen() {
       });
   }
 
-  // async function handleUpdate() {
-  //   const imageUrl = await uploadImageToFirebaseStore();
+  async function handleUpdate() {
+    let imageUrl = await uploadImageToFirebaseStore();
 
-  //   if(imageUrl == null && userData.userImg)
-  // }
+    if (imageUrl == null && userData.userImg) {
+      imageUrl = userData.userImg;
+    }
+
+    firebase
+      .firestore()
+      .collection("users")
+      .doc(user.uid)
+      .update({
+        fname: userData.fname,
+        lname: userData.lname,
+        about: userData.about,
+        phone: userData.phone,
+        country: userData.country,
+        city: userData.city,
+        userImg: imageUrl,
+      })
+      .then(() => {
+        console.log("User Updated!!");
+        Alert.alert("Successfull", "Profile Updated Successfully");
+      });
+  }
 
   return (
     <View style={styles.container}>
@@ -227,6 +248,8 @@ export default function EditProfileScreen() {
                 source={
                   image !== null
                     ? { uri: image }
+                    : userData && userData.userImg !== null
+                    ? { uri: userData.userImg }
                     : require("../assets/users/user1.jpg")
                 }
                 style={{ height: 100, width: 100 }}
@@ -277,7 +300,25 @@ export default function EditProfileScreen() {
             placeholder="Last Name"
             placeholderTextColor="#666666"
             autoCorrect={false}
+            value={userData ? userData.lname : ""}
+            onChangeText={(text) => {
+              setUserData({ ...userData, lname: text });
+            }}
             style={styles.textInput}
+          />
+        </View>
+
+        <View style={styles.action}>
+          <MaterialCommunityIcons name="note-text-outline" size={20} />
+          <TextInput
+            placeholder="About"
+            placeholderTextColor="#666666"
+            autoCorrect={false}
+            style={styles.textInput}
+            value={userData ? userData.about : ""}
+            onChangeText={(text) => {
+              setUserData({ ...userData, about: text });
+            }}
           />
         </View>
         <View style={styles.action}>
@@ -288,16 +329,10 @@ export default function EditProfileScreen() {
             autoCorrect={false}
             style={styles.textInput}
             keyboardType="number-pad"
-          />
-        </View>
-        <View style={styles.action}>
-          <AntDesign name="mail" size={20} />
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor="#666666"
-            autoCorrect={false}
-            style={styles.textInput}
-            keyboardType="email-address"
+            value={userData ? userData.phone : ""}
+            onChangeText={(text) => {
+              setUserData({ ...userData, phone: text });
+            }}
           />
         </View>
         <View style={styles.action}>
@@ -307,6 +342,10 @@ export default function EditProfileScreen() {
             placeholderTextColor="#666666"
             autoCorrect={false}
             style={styles.textInput}
+            value={userData ? userData.country : ""}
+            onChangeText={(text) => {
+              setUserData({ ...userData, country: text });
+            }}
           />
         </View>
         <View style={styles.action}>
@@ -316,6 +355,10 @@ export default function EditProfileScreen() {
             placeholderTextColor="#666666"
             autoCorrect={false}
             style={styles.textInput}
+            value={userData ? userData.city : ""}
+            onChangeText={(text) => {
+              setUserData({ ...userData, city: text });
+            }}
           />
         </View>
         <FormButton

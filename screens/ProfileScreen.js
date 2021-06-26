@@ -22,6 +22,13 @@ export default function ProfileScreen({ navigation, route }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleted, setDeleted] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    fetchPost();
+    getUser();
+    navigation.addListener("focus", () => setLoading(!loading));
+  }, [navigation, loading]);
 
   useEffect(() => {
     if (deleted) {
@@ -30,9 +37,19 @@ export default function ProfileScreen({ navigation, route }) {
     }
   }, [deleted]);
 
-  useEffect(() => {
-    fetchPost();
-  }, []);
+  async function getUser() {
+    const currentUser = await firebase
+      .firestore()
+      .collection("users")
+      .doc(route.params ? route.params.userId : user.uid)
+      .get()
+      .then((documentSnapshot) => {
+        if (documentSnapshot.exists) {
+          console.log("user data: ", documentSnapshot.data());
+          setUserData(documentSnapshot.data());
+        }
+      });
+  }
 
   async function fetchPost() {
     try {
@@ -40,7 +57,7 @@ export default function ProfileScreen({ navigation, route }) {
       await firebase
         .firestore()
         .collection("post")
-        .where("userId", "==", user.uid)
+        .where("userId", "==", route.params ? route.params.userId : user.uid)
         .orderBy("postTime", "desc")
         .get()
         .then((querySnapshot) => {
@@ -146,7 +163,6 @@ export default function ProfileScreen({ navigation, route }) {
     );
   }
 
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
@@ -161,15 +177,20 @@ export default function ProfileScreen({ navigation, route }) {
       >
         <Image
           style={styles.userImg}
-          source={require("../assets/users/user1.jpg")}
+          source={
+            userData && userData.userImg !== null
+              ? { uri: userData.userImg }
+              : require("../assets/users/user1.jpg")
+          }
         />
-        <Text style={styles.userName}>Jenny Doe</Text>
-        <Text style={styles.aboutUser}>
-          {route.params ? route.params.userId : user.uid}
+        <Text style={styles.userName}>
+          {userData ? `${userData.fname} ${userData.lname}` : "UserName"}
         </Text>
+        {/* <Text style={styles.aboutUser}>
+          {route.params ? route.params.userId : user.uid}
+        </Text> */}
         <Text style={styles.aboutUser}>
-          This quickstart shows you how to set up Cloud Firestore, just added in
-          the Firebase console.
+          {userData ? userData.about : "---About---"}
         </Text>
         <View style={styles.userBtnWrapper}>
           {route.params ? (
@@ -235,7 +256,7 @@ export default function ProfileScreen({ navigation, route }) {
         </View>
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
-            <Text style={styles.userInfoTitle}>22</Text>
+            <Text style={styles.userInfoTitle}>{posts.length}</Text>
             <Text style={styles.userInfoSubTitle}>Posts</Text>
           </View>
           <View style={styles.userInfoItem}>

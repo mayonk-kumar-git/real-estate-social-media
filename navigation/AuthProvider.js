@@ -49,8 +49,12 @@ export function AuthProvider({ children }) {
                   .collection("users")
                   .doc(firebase.auth().currentUser.uid)
                   .set({
-                    fname: "",
-                    lname: "",
+                    fname: "User",
+                    lname: "Name",
+                    about: "--About--",
+                    phone: "",
+                    country: "",
+                    city: "",
                     email: email,
                     createdAt: firebase.firestore.Timestamp.fromDate(
                       new Date()

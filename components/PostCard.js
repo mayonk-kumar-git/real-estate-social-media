@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
+import * as firebase from "firebase";
 
 // ---------------------------------------------------------------
 import { AuthContext } from "../navigation/AuthProvider";
@@ -24,16 +25,43 @@ import {
 
 export default function PostCard({ item, onDelete, onPressUserInfo }) {
   const { user } = useContext(AuthContext);
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  async function getUser() {
+    const currentUser = await firebase
+      .firestore()
+      .collection("users")
+      .doc(item.userId)
+      .get()
+      .then((documentSnapshot) => {
+        if (documentSnapshot.exists) {
+          console.log("user data: ", documentSnapshot.data());
+          setUserData(documentSnapshot.data());
+        }
+      });
+  }
 
   return (
     <Card>
       <UserInfo>
         <TouchableOpacity onPress={onPressUserInfo}>
-          <UserImg source={item.userImg} />
+          <UserImg
+            source={
+              userData && userData.userImg !== null
+                ? { uri: userData.userImg }
+                : require("../assets/users/user1.jpg")
+            }
+          />
         </TouchableOpacity>
         <UserInfoText>
           <TouchableOpacity onPress={onPressUserInfo}>
-            <UserName>{item.userName}</UserName>
+            <UserName>
+              {userData ? `${userData.fname} ${userData.lname}` : "UserName"}
+            </UserName>
           </TouchableOpacity>
           <PostTime>{moment(item.postTime.toDate()).fromNow()}</PostTime>
         </UserInfoText>
