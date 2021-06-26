@@ -12,11 +12,12 @@ import * as firebase from "firebase";
 
 // ---------------------------------------------------------------
 import FormButton from "../components/FormButton";
+import EditProfileScreen from "./EditProfileScreen";
 import PostCard from "../components/PostCard";
 import { AuthContext } from "../navigation/AuthProvider";
 // ---------------------------------------------------------------
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation, route }) {
   const { logout, user } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -145,6 +146,7 @@ export default function ProfileScreen() {
     );
   }
 
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView
@@ -152,6 +154,8 @@ export default function ProfileScreen() {
         contentContainerStyle={{
           justifyContent: "center",
           alignItems: "center",
+          paddingTop: route.params ? 30 : 90,
+          paddingBottom: 20,
         }}
         showVerticalScrollIndicator={false}
       >
@@ -161,26 +165,73 @@ export default function ProfileScreen() {
         />
         <Text style={styles.userName}>Jenny Doe</Text>
         <Text style={styles.aboutUser}>
+          {route.params ? route.params.userId : user.uid}
+        </Text>
+        <Text style={styles.aboutUser}>
           This quickstart shows you how to set up Cloud Firestore, just added in
           the Firebase console.
         </Text>
         <View style={styles.userBtnWrapper}>
-          <TouchableOpacity
-            style={styles.userBtn}
-            onPress={() => {
-              alert("message button pressed");
-            }}
-          >
-            <Text style={styles.userBtnTxt}>Messages</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.userBtn}
-            onPress={() => {
-              alert("Follow button pressed");
-            }}
-          >
-            <Text style={styles.userBtnTxt}>Follow</Text>
-          </TouchableOpacity>
+          {route.params ? (
+            route.params.userId == user.uid ? (
+              <>
+                <TouchableOpacity
+                  style={styles.userBtn}
+                  onPress={() => {
+                    navigation.navigate("EditProfile");
+                  }}
+                >
+                  <Text style={styles.userBtnTxt}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.userBtn}
+                  onPress={() => {
+                    logout();
+                  }}
+                >
+                  <Text style={styles.userBtnTxt}>Logout</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <TouchableOpacity
+                  style={styles.userBtn}
+                  onPress={() => {
+                    alert("message button pressed");
+                  }}
+                >
+                  <Text style={styles.userBtnTxt}>Messages</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.userBtn}
+                  onPress={() => {
+                    alert("Follow button pressed");
+                  }}
+                >
+                  <Text style={styles.userBtnTxt}>Follow</Text>
+                </TouchableOpacity>
+              </>
+            )
+          ) : (
+            <>
+              <TouchableOpacity
+                style={styles.userBtn}
+                onPress={() => {
+                  navigation.navigate("EditProfile");
+                }}
+              >
+                <Text style={styles.userBtnTxt}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.userBtn}
+                onPress={() => {
+                  logout();
+                }}
+              >
+                <Text style={styles.userBtnTxt}>Logout</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
         <View style={styles.userInfoWrapper}>
           <View style={styles.userInfoItem}>
@@ -207,8 +258,10 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    padding: 20,
+    backgroundColor: "#f2f5fe",
+    paddingHorizontal: 20,
+    // paddingVertical: 40,
+
     // ---------------------------
     // justifyContent: "center",
     // alignItems: "center",

@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
 
@@ -21,15 +22,19 @@ import {
 } from "../styles/FeedStyles";
 // ---------------------------------------------------------------
 
-export default function PostCard({ item, onDelete }) {
+export default function PostCard({ item, onDelete, onPressUserInfo }) {
   const { user } = useContext(AuthContext);
 
   return (
     <Card>
       <UserInfo>
-        <UserImg source={item.userImg} />
+        <TouchableOpacity onPress={onPressUserInfo}>
+          <UserImg source={item.userImg} />
+        </TouchableOpacity>
         <UserInfoText>
-          <UserName>{item.userName}</UserName>
+          <TouchableOpacity onPress={onPressUserInfo}>
+            <UserName>{item.userName}</UserName>
+          </TouchableOpacity>
           <PostTime>{moment(item.postTime.toDate()).fromNow()}</PostTime>
         </UserInfoText>
       </UserInfo>

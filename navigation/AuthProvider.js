@@ -36,9 +36,28 @@ export function AuthProvider({ children }) {
         },
         register: async (email, password) => {
           try {
+            // await firebase
+            //   .auth()
+            //   .createUserWithEmailAndPassword(email, password);
+
             await firebase
               .auth()
-              .createUserWithEmailAndPassword(email, password);
+              .createUserWithEmailAndPassword(email, password)
+              .then(() => {
+                firebase
+                  .firestore()
+                  .collection("users")
+                  .doc(firebase.auth().currentUser.uid)
+                  .set({
+                    fname: "",
+                    lname: "",
+                    email: email,
+                    createdAt: firebase.firestore.Timestamp.fromDate(
+                      new Date()
+                    ),
+                    userImg: null,
+                  });
+              });
           } catch (e) {
             console.log(e);
           }

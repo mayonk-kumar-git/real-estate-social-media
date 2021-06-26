@@ -4,7 +4,7 @@ export const Container = styled.View`
   flex: 1;
   align-items: center;
   background-color: #f2f5fe;
-  padding: 20px;
+  padding: 5px;
 `;
 
 export const Card = styled.View`

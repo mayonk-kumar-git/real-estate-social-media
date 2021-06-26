@@ -89,7 +89,7 @@ const Posts = [
   },
 ];
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [deleted, setDeleted] = useState(false);
@@ -221,7 +221,13 @@ export default function HomeScreen() {
       <FlatList
         data={posts}
         renderItem={({ item }) => (
-          <PostCard item={item} onDelete={handleDelete} />
+          <PostCard
+            item={item}
+            onDelete={handleDelete}
+            onPressUserInfo={() =>
+              navigation.navigate("HomeProfile", { userId: item.userId })
+            }
+          />
         )}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
