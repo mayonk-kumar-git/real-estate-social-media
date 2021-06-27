@@ -15,11 +15,13 @@ import {
   ImageBackground,
   StyleSheet,
   Alert,
+  ScrollView,
 } from "react-native";
 
 // ---------------------------------------------------------------
 import FormButton from "../components/FormButton";
 import { AuthContext } from "../navigation/AuthProvider";
+import { windowHeight } from "../utils/Dimentions";
 
 // ---------------------------------------------------------------
 
@@ -376,6 +378,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    // backgroundColor: "red",
+    height: windowHeight,
   },
   commandButton: {
     padding: 15,

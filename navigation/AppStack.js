@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 // -----------------------------------------------------------------------
 import HomeScreen from "../screens/HomeScreen";
@@ -101,6 +102,34 @@ const FeedStack = ({ navigation }) => (
   </Stack.Navigator>
 );
 
+const MessageStack = ({ navigation }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Messages"
+        component={MessagesScreen}
+        options={{
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={({ route }) => ({
+          title: route.params.userName,
+          headerTitleAlign: "center",
+          headerBackTitleVisible: false,
+          headerBackImage: () => (
+            <View style={{ marginLeft: 15 }}>
+              <Ionicons name="arrow-back" size={25} color="#2e64e5" />
+            </View>
+          ),
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const ProfileStack = ({ navigation }) => {
   return (
     <Stack.Navigator>
@@ -128,6 +157,14 @@ const ProfileStack = ({ navigation }) => {
 };
 
 const AppStack = () => {
+  function getTabBarVisibility(route) {
+    const routeName = getFocusedRouteNameFromRoute(route) ?? "";
+
+    if (routeName === "Chat" || routeName === "AddPost") {
+      return false;
+    }
+    return true;
+  }
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -138,8 +175,9 @@ const AppStack = () => {
       <Tab.Screen
         name="Home"
         component={FeedStack}
-        options={{
+        options={({ route }) => ({
           tabBarLabel: "Home",
+          tabBarVisible: getTabBarVisibility(route),
           // tabBarVisible: route.state && route.state.index === 0,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
@@ -148,12 +186,13 @@ const AppStack = () => {
               size={size}
             />
           ),
-        }}
+        })}
       />
       <Tab.Screen
         name="Messages"
-        component={ChatScreen}
-        options={{
+        component={MessageStack}
+        options={({ route }) => ({
+          tabBarVisible: getTabBarVisibility(route),
           tabBarIcon: ({ color, size }) => (
             <Ionicons
               name="chatbox-ellipses-outline"
@@ -161,7 +200,7 @@ const AppStack = () => {
               size={size}
             />
           ),
-        }}
+        })}
       />
       <Tab.Screen
         name="Prediction"
