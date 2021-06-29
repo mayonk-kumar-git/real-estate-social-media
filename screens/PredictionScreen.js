@@ -17,7 +17,7 @@ import { locationCodeData } from "../config/locationCodeData";
 import { windowWidth, windowHeight } from "../utils/Dimentions";
 
 // ---------------------------------------------------------------
-const BASE_URI = "http://192.168.158.218:5000/";
+const BASE_URI = "http://192.168.94.218:5000/";
 export default function PredictionScreen() {
   // const [locationCodeData, setLocationCodeData] = useState([]);
   const [location, setLocation] = useState("");
